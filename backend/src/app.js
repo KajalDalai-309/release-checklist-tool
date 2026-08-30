@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const { typeDefs } = require('./graphql/typeDefs');
@@ -28,6 +29,18 @@ async function createApp() {
 
   await apolloServer.start();
   app.use('/graphql', expressMiddleware(apolloServer));
+
+  // Serve static frontend in production (Single Service Deployment)
+  const frontendDist = path.join(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendDist));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/graphql') || req.path.startsWith('/health')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendDist, 'index.html'), (err) => {
+      if (err) next();
+    });
+  });
 
   // Global Error Handler
   app.use((err, req, res, next) => {

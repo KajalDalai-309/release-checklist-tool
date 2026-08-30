@@ -1,0 +1,14 @@
+{
+  "name": "release-checklist-tool-root",
+  "version": "1.0.0",
+  "description": "Fullstack Release Checklist Tool (React + Node/Express + Prisma + GraphQL)",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "db:setup": "cd backend && npx prisma db push && node prisma/seed.js",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "test": "npm test --prefix backend",
+    "build": "npm run build --prefix frontend"
+  }
+}

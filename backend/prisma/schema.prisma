@@ -1,0 +1,18 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Release {
+  id              String   @id @default(uuid())
+  name            String
+  targetDate      DateTime
+  additionalInfo  String?  @default("")
+  completedSteps  String   @default("[]") // JSON stringified array of completed step IDs e.g. ["step-1", "step-2"]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
